@@ -30,20 +30,43 @@ Requirements
 Usage
 -----
 
+Simply calling
+
+```ruby
+svn = SvnWrapper.new(username, password)
+```
+
+creates the instance of the repository.  A note about the parameters...
+
+1. SvnWrapper has three instance variables that can be set at initialization or later (attr_accessor)
+--*:username
+--*:password
+--*:quiet
+
+2. Also has a read-only variable that gives the last exit code of the svn executable - it is of type Process.  It is nil until svn is called
+--*:processReturn
+
+Examples
+--------
+
 ```ruby
    #Since SVN typically caches the user name and password,
    #these arguments are optional
    username = "a_username"
    password = "a_password"
 
-   svn = SvnWrapper.new(username, password)
+   svn = SvnWrapper.new(:username => username, :password => password)
+```
 
+```ruby
    #checkout example
    puts "Checking out '#{options[:repo]}'"
    svn.quiet = false
    svn.checkout("RepoLocation", "FolderLocation")
    svn.quiet = true
+```
 
+```ruby
    #update example
    svn.quiet = false
    svn.update("FolderLocation")
