@@ -1,15 +1,17 @@
-SVN-ruby
+rubySvnWrapper
 ========
 
 A lightweight wrapper written in Ruby for the Linux command line SVN interface. It allows basic interaction with an SVN repository, including adding, renaming, deleting, committing, diffing and checking the status of files.
 
+This is for people who are looking for a quick solution for SVN integration in their projects and who don't want to deal with Ruby bindings.  However, it is advisable if you are looking for a more efficient solution to look into Ruby Bindings
+
 Licensed under the MIT license (See LICENSE.txt for details)
 
-Authors: Andrew Berkeley
+Authors: Kevin McIntosh, forked from Andrew Berkeley's project
 
-Copyright: Copyright (c) Andrew Berkeley
+Copyright: Copyright (c) Kevin McIntosh
 
-Homepage: https://github.com/spatchcock/svn-ruby
+Homepage: https://github.com/kevjames3/rubySvnWrapper
 
 
 Installation
@@ -21,7 +23,7 @@ Just include the code somewhere appropriate
 Requirements
 ------------
 
- * UNIX system
+ * UNIX system or Windows System
  * SVN installation
  * Ruby!
 
