@@ -111,6 +111,12 @@ class SvnWrapper
     execute("rename \"#{old_filename}\" \"#{new_filename}\"")
   end
 
+  #Get the repository address from a checked out repo
+  def repositoryAddress(folder)
+    execute("info \"#{folder}\"").split('\n').grep(/URL: (.*)/)
+    return $1
+  end
+
   #Update a file or folder.  If no revision is given, it will update to HEAD
   def update(file, revision = "HEAD")
     execute("update -r#{revision} \"#{file}\"")
