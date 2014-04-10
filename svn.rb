@@ -3,17 +3,20 @@ require 'uri'
 
 class SvnWrapper
 
-  attr_accessor :username, :password, :quiet
-  attr_reader :processReturn #this is the last return code
+  attr_accessor(
+    :username, #DEFAULT: "".  If blank, will use the username in the SVN cache
+    :password, #DEFAULT: "".  If blank, will use the password in the SVN cache
+    :quiet #DEFAULT: true. Set to false to print STDOUT and STDERR of svn.exe to output
+    )
+  attr_reader(:processReturn) #this is the last return code
 
   def initialize(args = {})
     @username = args[:username] unless args[:username].nil?
     @password = args[:password] unless args[:password].nil?
-    @quiet = true
+    @quiet    = args[:quiet].nil? ? true : args[:quiet].nil?
   end
   
   # Returns a string to be passed into commands containing authentication options
-  # Requires setting of username and password via attr_accessor methods
   def authentication_details
     details = ""
     if defined? @@username
@@ -28,8 +31,8 @@ class SvnWrapper
   end
 
   # Returns an array representing the current status of any new or modified files
-  def status
-    execute("status").split(/\n/).map do |file|
+  def status(folderLocation)
+    execute("status #{folderLocation}").split(/\n/).map do |file|
       file =~ /(\?|\!|\~|\*|\+|A|C|D|I|M|S|X)\s*([\w\W]*)/
       [$1, $2]
     end
@@ -52,10 +55,12 @@ class SvnWrapper
     commit message
   end
   
+  #Checkout a folder from repoAddress to folderLocation
   def checkout(repoAddress, folderLocation)
     execute("co #{repoAddress} #{folderLocation}")
   end
 
+  #Cleanup a folder
   def cleanup(folder)
     execute("cleanup #{folder}")
   end
@@ -95,6 +100,7 @@ class SvnWrapper
     execute("cat -r #{revision} #{file}")
   end
 
+  # Returns true if the folder is an instance of a checked out repository
   def isCheckedOutRepo?(location)
     execute("info #{location}")
     return (@processReturn.exitstatus == 0)
@@ -105,8 +111,7 @@ class SvnWrapper
     execute("rename #{old_filename} #{new_filename}")
   end
 
-  
-
+  #Update a file or folder.  If no revision is given, it will update to HEAD
   def update(file, revision = "HEAD")
     execute("update -r#{revision} \"#{file}\"")
   end
