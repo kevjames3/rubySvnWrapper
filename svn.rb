@@ -114,7 +114,18 @@ class SvnWrapper
   private
 
   def execute(command)
-    %x{#{command} #{authentication_details}}
+    stdoutAndStderr = ""
+    command = "svn #{command} #{authentication_details} 2>&1"
+    IO.popen(command) do |stream|
+      stream.each do |line|
+        stdoutAndStderr += line
+        puts line unless @quiet
+      end
+    end
+
+    @processReturn = $?
+
+    return stdoutAndStderr
   end
 
 end
