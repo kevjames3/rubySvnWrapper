@@ -52,6 +52,14 @@ class SvnWrapper
     commit message
   end
   
+  def checkout(repoAddress, folderLocation)
+    execute("co #{repoAddress} #{folderLocation}")
+  end
+
+  def cleanup(folder)
+    execute("cleanup #{folder}")
+  end
+
   # Commits all changes, and returns the new revision number
   # An optional commit message can be passed if required
   def commit(message=nil)
