@@ -32,7 +32,7 @@ class SvnWrapper
 
   # Returns an array representing the current status of any new or modified files
   def status(folderLocation)
-    execute("status #{folderLocation}").split(/\n/).map do |file|
+    execute("status \"#{folderLocation}\"").split(/\n/).map do |file|
       file =~ /(\?|\!|\~|\*|\+|A|C|D|I|M|S|X)\s*([\w\W]*)/
       [$1, $2]
     end
@@ -40,7 +40,7 @@ class SvnWrapper
   
   # Adds the given path to the working copy
   def add(path)
-    execute("add #{path}")
+    execute("add \"#{path}\"")
   end
   
   # Adds all new or modified files to the working copy
@@ -57,12 +57,12 @@ class SvnWrapper
   
   #Checkout a folder from repoAddress to folderLocation
   def checkout(repoAddress, folderLocation)
-    execute("co #{repoAddress} #{folderLocation}")
+    execute("co #{repoAddress} \"#{folderLocation}\"")
   end
 
   #Cleanup a folder
   def cleanup(folder)
-    execute("cleanup #{folder}")
+    execute("cleanup \"#{folder}\"")
   end
 
   # Commits all changes, and returns the new revision number
@@ -82,7 +82,7 @@ class SvnWrapper
 
   # Delete a file based on a given path
   def delete(file)
-    execute("delete #{file}")
+    execute("delete \"#{file}\"")
   end
   
   # Returns a diff of two commits based on their respective revision numbers
@@ -91,24 +91,24 @@ class SvnWrapper
     if file.nil?
       execute("diff -r #{revision_1}:#{revision_2}")
     else
-      execute("diff -r #{revision_1}:#{revision_2} #{file}")
+      execute("diff -r #{revision_1}:#{revision_2} \"#{file}\"")
     end
   end
 
   # Retrieve a file based on it's path and commit revision number
   def get(file,revision)
-    execute("cat -r #{revision} #{file}")
+    execute("cat -r #{revision} \"#{file}\"")
   end
 
   # Returns true if the folder is an instance of a checked out repository
   def isCheckedOutRepo?(location)
-    execute("info #{location}")
+    execute("info \"#{location}\"")
     return (@processReturn.exitstatus == 0)
   end
 
   # Rename a file based on the given current and new filenames
   def rename(old_filename, new_filename)
-    execute("rename #{old_filename} #{new_filename}")
+    execute("rename \"#{old_filename}\" \"#{new_filename}\"")
   end
 
   #Update a file or folder.  If no revision is given, it will update to HEAD
