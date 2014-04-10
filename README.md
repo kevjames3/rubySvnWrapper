@@ -39,12 +39,12 @@ svn = SvnWrapper.new(:username => username, :password => password)
 creates the instance of the repository.  A note about the parameters...
 
 1. SvnWrapper has three instance variables that can be set at initialization or later (attr_accessor)
-* :username
-* :password
-* :quiet
+  * :username
+  * :password
+  * :quiet
 
 2. Also has a read-only variable that gives the last exit code of the svn executable - it is of type Process.  It is nil until svn is called
-* :processReturn
+  * :processReturn
 
 Examples
 --------
