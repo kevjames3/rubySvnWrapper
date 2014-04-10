@@ -3,7 +3,7 @@ rubySvnWrapper
 
 A lightweight wrapper written in Ruby for the Linux command line SVN interface. It allows basic interaction with an SVN repository, including adding, renaming, deleting, committing, diffing and checking the status of files.
 
-This is for people who are looking for a quick solution for SVN integration in their projects and who don't want to deal with Ruby bindings.  However, it is advisable if you are looking for a more efficient solution to look into Ruby Bindings
+This is for people who are looking for a quick solution for SVN integration in their projects and who don't want to deal with Ruby bindings.  However, it is advisable if you are looking for a more efficient solution to look into Ruby Bindings.
 
 Licensed under the MIT license (See LICENSE.txt for details)
 
@@ -24,26 +24,46 @@ Requirements
 ------------
 
  * UNIX system or Windows System
- * SVN installation
+ * SVN installation (The wrapper executes from the command line)
  * Ruby!
 
 Usage
 -----
 
-SVN authentication credentials must be initialized as follows:
+```ruby
+   #Since SVN typically caches the user name and password,
+   #these arguments are optional
+   username = "a_username"
+   password = "a_password"
 
-	SVN.username = "a_username"
-	SVN.password = "a_password"
+   svn = SvnWrapper.new(username, password)
 
-File management can then be performed:
+   #checkout example
+   puts "Checking out '#{options[:repo]}'"
+   svn.quiet = false
+   svn.checkout("RepoLocation", "FolderLocation")
+   svn.quiet = true
 
-	File.open("new_file.txt", 'w') { |file| file.write "This is a new file" }
+   #update example
+   svn.quiet = false
+   svn.update("FolderLocation")
+   svn.quiet = true
 
-	SVN.status                               => [["?", "new_file.txt"]]
+   if(svn.processReturn.exitstatus != 0)
+      puts "Folder had a bad update, trying to clean up..."
+      svn.cleanup("FolderLocation")
 
-	SVN.add "new_file.txt"                   => "A         new_file.txt\n"
+      puts "Updating again..."
+      svn.quiet = false
+      svn.update("FolderLocation")
+      svn.quiet = true
+   end
+```
 
-	SVN.commit "adding new file"             => "12345 // new revision number
+   
+	
+
+
 
 
 
