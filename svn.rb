@@ -74,6 +74,11 @@ class SvnWrapper
       return nil
     end
   end
+
+  # Delete a file based on a given path
+  def delete(file)
+    execute("delete #{file}")
+  end
   
   # Returns a diff of two commits based on their respective revision numbers
   # (first and second arguments) and a repository path (third argument)
@@ -90,14 +95,20 @@ class SvnWrapper
     execute("cat -r #{revision} #{file}")
   end
 
+  def isCheckedOutRepo?(location)
+    execute("info #{location}")
+    return (@processReturn.exitstatus == 0)
+  end
+
   # Rename a file based on the given current and new filenames
   def rename(old_filename, new_filename)
     execute("rename #{old_filename} #{new_filename}")
   end
 
-  # Delete a file based on a given path
-  def delete(file)
-    execute("delete #{file}")
+  
+
+  def update(file, revision = "HEAD")
+    execute("update -r#{revision} \"#{file}\"")
   end
 
   private
